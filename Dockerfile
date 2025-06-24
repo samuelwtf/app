@@ -18,7 +18,7 @@ RUN reflex export --production
 # Instalar gunicorn para servir la app
 RUN pip install gunicorn
 
-EXPOSE 3000
+EXPOSE 8000
 
 # Ejecutar la app desde el archivo app.py
-CMD ["gunicorn", "--bind", "0.0.0.0:3000", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
