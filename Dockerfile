@@ -1,20 +1,25 @@
-# Imagen base oficial de Python
 FROM python:3.12-slim
 
-# Establece el directorio de trabajo en el contenedor
+# Instala dependencias del sistema
+RUN apt-get update && apt-get install -y curl gnupg \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean
+
+# Verifica que npm y node están instalados
+RUN node -v && npm -v
+
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos de requerimientos
-COPY requirements.txt .
-
-# Instala las dependencias
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copia el resto de la aplicación
+# Copia archivos del proyecto
 COPY . .
 
-# Expone el puerto que usará la app
-EXPOSE 8000
+# Instala dependencias Python
+RUN pip install --no-cache-dir reflex
 
-# Comando por defecto para ejecutar la app
-CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Expone el puerto
+EXPOSE 3000
+
+# Ejecuta Reflex
+CMD ["reflex", "run", "--env", "production"]
