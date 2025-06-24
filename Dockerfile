@@ -1,24 +1,4 @@
-# Usa la imagen base de Python 3.12 (versión slim para menor tamaño)
-FROM python:3.12-slim-bookworm
-
-# Establece el directorio de trabajo base dentro del contenedor
-WORKDIR /app
-
-# Actualiza los índices de paquetes e instala las dependencias del sistema necesarias
-RUN apt-get update && \
-    apt-get install -y unzip curl && \
-    rm -rf /var/lib/apt/lists/*
-
-# Copia el archivo de requisitos e instala las dependencias de Python
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Instala gunicorn explícitamente para asegurar que esté en el PATH
-RUN pip install gunicorn==21.2.0
-
-# Copia el resto del código de tu aplicación al contenedor
-# Esto copiará 'src' y todo lo demás a /app
-COPY . .
+# ... (líneas anteriores de tu Dockerfile) ...
 
 # Elimina cualquier rastro de la configuración predeterminada de Reflex si existe
 # y luego cambia el directorio de trabajo a la carpeta 'src'
@@ -27,8 +7,8 @@ RUN rm -rf .reflex && rm -rf .web
 WORKDIR /app/src
 
 # Exporta la aplicación Reflex para producción
-# Reflex ahora buscará 'app.py' en el WORKDIR actual (/app/src)
-RUN reflex export --frontend-only --frontend-path . --backend-path .
+# ¡IMPORTANTE! Simplificamos a solo --frontend-only
+RUN reflex export --frontend-only
 
 # Vuelve al directorio raíz de la app para el CMD de Gunicorn
 # Gunicorn espera la ruta del módulo desde /app
@@ -38,5 +18,4 @@ WORKDIR /app
 EXPOSE 8000
 
 # Comando para ejecutar la aplicación Reflex usando Gunicorn
-# La ruta ahora es 'src.app:app' porque el archivo se llama app.py dentro de src.
 CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:8000", "src.app:app", "--access-logfile", "-", "--error-logfile", "-"]
