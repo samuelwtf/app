@@ -27,7 +27,9 @@ RUN rm -rf .reflex && rm -rf .web
 WORKDIR /app/src
 
 # Exporta la aplicación Reflex para producción
-RUN reflex export --frontend-only
+# ¡IMPORTANTE! Usamos --app para especificar la ubicación de tu aplicación
+# 'app' es el nombre del archivo (app.py) dentro de src/.
+RUN reflex export --frontend-only --app app
 
 # Vuelve al directorio raíz de la app para el CMD de Gunicorn
 # Gunicorn espera la ruta del módulo desde /app
