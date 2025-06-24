@@ -18,4 +18,4 @@ RUN reflex export
 RUN pip install gunicorn
 
 # Comando para iniciar el servidor
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "reflex_export.app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", ".web.app.app:app"]
