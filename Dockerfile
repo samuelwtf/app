@@ -1,23 +1,25 @@
-# Usa la imagen base de Python 3.12 (como sugiere el blog)
-FROM python:3.12
+# Etapa base con Python 3.12
+FROM python:3.12-slim
 
-# Configura variables de entorno (REDIS_URL es opcional si no usas Redis)
-ENV REDIS_URL=
-
-# Establece el directorio de trabajo dentro del contenedor
+# Añadir Reflex al PATH
+ENV PATH="/root/.reflex/bin:$PATH"
 WORKDIR /app
 
-# Copia todo el contenido de tu proyecto al contenedor
-# Esto incluye Dockerfile, requirements.txt, rxconfig.py, y la carpeta system/
+# Instalar dependencias del sistema y Reflex CLI
+RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/* && \
+    curl -sSL https://reflex.dev/install.sh | bash
+
+# Copiar el código fuente de la app
 COPY . .
 
-# Instala todas las dependencias de Python
-RUN pip install -r requirements.txt
+# Compilar la app para producción
+RUN reflex export --production
 
-# El ENTRYPOINT ejecuta 'reflex run --backend-only'.
-# Reflex leerá rxconfig.py para encontrar 'system.app' y servirá el backend.
-# También compilará y servirá el frontend automáticamente.
-ENTRYPOINT ["reflex", "run", "--env", "prod", "--backend-only", "--loglevel", "debug" ]
+# Instalar servidor WSGI Gunicorn
+RUN pip install gunicorn
 
-# Expone el puerto 8000, donde Reflex estará escuchando (backend y frontend)
-EXPOSE 8000
+# Exponer el puerto estándar para Reflex
+EXPOSE 3000
+
+# Ejecutar la app (usa el objeto `app` del archivo app.py)
+CMD ["gunicorn", "--bind", "0.0.0.0:3000", "app:app"]
