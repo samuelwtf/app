@@ -22,4 +22,4 @@ RUN pip install gunicorn
 EXPOSE 3000
 
 # Ejecutar la app (usa el objeto `app` del archivo app.py)
-CMD ["gunicorn", "--bind", "0.0.0.0:3000", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
