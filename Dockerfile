@@ -13,7 +13,7 @@ RUN pip install reflex
 COPY . .
 
 # Exportar la app para producción
-RUN reflex export --production
+RUN reflex export
 
 # Instalar gunicorn para servir la app
 RUN pip install gunicorn
