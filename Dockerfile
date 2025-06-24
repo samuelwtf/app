@@ -1,36 +1,40 @@
-# ---------------- BUILDER ----------------
+# -------- STAGE 1: Build --------
 FROM python:3.12-slim AS builder
 
-# Instalar dependencias necesarias
-RUN apt-get update && \
-    apt-get install -y curl unzip build-essential git && \
-    apt-get clean
+# Instalar dependencias necesarias del sistema
+RUN apt-get update && apt-get install -y curl unzip git build-essential
+
+# Instalar Bun para manejar frontend (lo requiere Reflex)
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="/root/.bun/bin:$PATH"
+
+# Crear y movernos al directorio de la app
+WORKDIR /app
+
+# Copiar dependencias y el código fuente
+COPY . .
 
 # Instalar Reflex
 RUN pip install reflex
 
-# Crear carpeta de trabajo
-WORKDIR /app
-
-# Copiar todo el código del proyecto
-COPY . .
-
-# Exportar la app en modo producción
+# Inicializar y exportar la app en modo producción
 RUN reflex export --env prod
 
-# ---------------- RUNNER ----------------
-FROM node:20-slim AS runner
+# -------- STAGE 2: Runtime --------
+FROM python:3.12-slim
 
-# Instalar servidor para servir frontend
-RUN npm install -g http-server
+# Instalar servidor estático
+RUN pip install httpserver
 
+# Crear directorio de trabajo
 WORKDIR /app
 
-# Copiar la exportación desde el builder (correcto con Reflex v0.4+)
+# Copiar archivos exportados desde el builder
 COPY --from=builder /app/.web/_export/ .
 
-# Exponer los puertos de frontend (3000) y backend (8000)
-EXPOSE 3000 8000
+# Exponer puertos para backend y frontend
+EXPOSE 8000
+EXPOSE 3000
 
-# Ejecutar ambos servicios
-CMD ["sh", "-c", "python3 -m http.server 8000 & http-server . -p 3000"]
+# Comando de arranque en producción
+CMD ["httpserver", "."]
