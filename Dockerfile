@@ -22,4 +22,4 @@ RUN pip install --no-cache-dir reflex
 EXPOSE 3000
 
 # Ejecuta Reflex
-CMD ["reflex", "run", "--env", "production"]
+CMD ["reflex", "run", "--env", "prod"]
