@@ -27,7 +27,7 @@ WORKDIR /app/src
 
 # Inicializa y exporta la aplicación Reflex para producción
 # Ahora no necesitas --app-name porque Reflex está en el directorio correcto
-RUN reflex init
+RUN reflex init -y 0
 RUN reflex export --frontend-only
 
 # *** Vuelve al directorio raíz de la app para el CMD de Gunicorn ***
