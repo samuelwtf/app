@@ -9,9 +9,12 @@ class State(rx.State):
 def index():
     return rx.vstack(
         rx.heading("Hola desde Reflex 🚀"),
-        rx.text(State.count),  # Esto se actualiza automáticamente
+        rx.text(lambda: f"Contador: {State.count}"),
         rx.button("Incrementar", on_click=State.increment)
     )
 
 app = rx.App()
-app.add_page(index, route="/")
+app.add_page(index)
+
+# ✅ Esto es clave para que gunicorn pueda servirlo correctamente
+app = app.compile()
