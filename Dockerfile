@@ -1,24 +1,41 @@
-# Etapa base con Python
-FROM python:3.12-slim
+# Etapa de construcción
+FROM python:3.12-slim AS builder
 
-# Instala unzip y curl (necesarios para instalar bun)
-RUN apt-get update && apt-get install -y curl unzip
-
-# Instala Reflex
-RUN pip install reflex
-
-# Crea el directorio de trabajo
 WORKDIR /app
 
-# Copia todo el código
+# Instalar dependencias necesarias
+RUN apt-get update && \
+    apt-get install -y curl unzip git && \
+    apt-get clean
+
+# Instalar Reflex
+RUN pip install reflex
+
+# Copiar el código de la app
 COPY . .
 
-# Establece el entrypoint si tu archivo raíz está en app/app/app.py
-ENV REFLEX_ENTRYPOINT=app/app/app.py
+# Ejecutar Reflex en modo producción (compila frontend y backend)
+RUN reflex run --env prod --frontend-only
+RUN reflex run --env prod --backend-only
 
-# Expone los puertos: 8000 (backend/ws) y 3000 (frontend)
+# Etapa final
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Instalar dependencias del sistema
+RUN apt-get update && \
+    apt-get install -y curl unzip git && \
+    apt-get clean
+
+# Instalar Reflex nuevamente
+RUN pip install reflex
+
+# Copiar la app desde el builder
+COPY --from=builder /app /app
+
+# Exponer puertos necesarios
 EXPOSE 3000 8000
 
-# Ejecuta en modo producción (con FastAPI + WebSocket)
-#CMD ["reflex", "run", "--env", "prod"]
-CMD ["python3", "-m", "reflex", "run", "--env", "prod"]
+# Ejecutar Reflex (modo producción)
+CMD ["reflex", "run", "--env", "prod"]
