@@ -16,6 +16,10 @@ RUN apt-get update && \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# **NUEVA LÍNEA / VERIFICACIÓN IMPORTANTE:** Instala gunicorn explícitamente
+# Esto asegura que gunicorn esté disponible en el PATH del contenedor
+RUN pip install gunicorn==21.2.0
+
 # Copia el resto del código de tu aplicación al contenedor
 COPY . .
 
