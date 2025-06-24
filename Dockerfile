@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-WORKDIR /app
+WORKDIR /app/.web
 
 # Copiar archivos
 COPY . .
@@ -18,4 +18,4 @@ RUN reflex export
 RUN pip install gunicorn
 
 # Comando para iniciar el servidor
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", ".web.app.app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app.app:app"]
