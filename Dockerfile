@@ -1,27 +1,17 @@
+# Usa una imagen oficial de Python
 FROM python:3.12-slim
 
-# Crear y establecer directorio de trabajo
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar archivos del proyecto
+# Copia los archivos del proyecto al contenedor
 COPY . .
 
-# Instalar unzip y curl para poder instalar bun
-RUN apt-get update && apt-get install -y unzip curl
+# Instala las dependencias
+RUN pip install --no-cache-dir fastapi uvicorn
 
-# Instalar dependencias
-RUN pip install --no-cache-dir -r requirements.txt
+# Expone el puerto en el que Uvicorn correrá
+EXPOSE 8000
 
-# Ejecutar reflex export para compilar frontend/backend
-RUN reflex export
-
-# Cambiar al directorio exportado
-WORKDIR /app/.web
-
-# Instalar Gunicorn
-RUN pip install gunicorn
-
-# Ejecutar la app con Gunicorn
-#CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app.app:app"]
-CMD ["gunicorn", "web.app.app:app", "--bind", "0.0.0.0:8000"]
-
+# Comando para iniciar la app con Uvicorn
+CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
