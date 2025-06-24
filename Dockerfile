@@ -1,6 +1,6 @@
 FROM python:3.12
 
-ENV REDIS_URL=redis://redis PYTHONUNBUFFERED=1
+ENV REDIS_URL=
 
 WORKDIR /app
 COPY . .
