@@ -2,7 +2,7 @@
 FROM python:3.12-slim
 
 # Establece el directorio de trabajo dentro del contenedor
-WORKDIR /
+WORKDIR /app
 
 # Actualiza los índices de paquetes e instala las dependencias del sistema necesarias
 # 'unzip' es para que Reflex pueda descomprimir archivos (ej. Bun)
@@ -39,4 +39,3 @@ EXPOSE 8000
 # con la ruta correcta a la instancia de tu objeto 'app' de Reflex.
 # Si tu app principal está en `myapp
 CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:8000", "app:app", "--access-logfile", "-", "--error-logfile", "-"]
-
