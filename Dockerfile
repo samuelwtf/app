@@ -1,7 +1,7 @@
 # ---------------- BUILDER ----------------
 FROM python:3.12-slim AS builder
 
-# Instalar dependencias del sistema necesarias
+# Instalar dependencias necesarias
 RUN apt-get update && \
     apt-get install -y curl unzip build-essential git && \
     apt-get clean
@@ -9,28 +9,28 @@ RUN apt-get update && \
 # Instalar Reflex
 RUN pip install reflex
 
-# Crear directorio de la app
+# Crear carpeta de trabajo
 WORKDIR /app
 
-# Copiar el código de la app
+# Copiar todo el código del proyecto
 COPY . .
 
-# Exportar la app en modo producción (esto genera web/_export)
+# Exportar la app en modo producción
 RUN reflex export --env prod
 
-# ---------------- RUNTIME ----------------
+# ---------------- RUNNER ----------------
 FROM node:20-slim AS runner
 
-# Instalar http-server globalmente para servir frontend
+# Instalar servidor para servir frontend
 RUN npm install -g http-server
 
 WORKDIR /app
 
-# Copiar archivos exportados desde el builder
-COPY --from=builder /app/web/_export/ .
+# Copiar la exportación desde el builder (correcto con Reflex v0.4+)
+COPY --from=builder /app/.web/_export/ .
 
-# Exponer los puertos del backend y frontend
+# Exponer los puertos de frontend (3000) y backend (8000)
 EXPOSE 3000 8000
 
-# Iniciar ambos servidores (frontend y backend)
-CMD ["sh", "-c", "python -m http.server 8000 & http-server . -p 3000"]
+# Ejecutar ambos servicios
+CMD ["sh", "-c", "python3 -m http.server 8000 & http-server . -p 3000"]
