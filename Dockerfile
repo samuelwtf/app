@@ -38,4 +38,5 @@ EXPOSE 8000
 # Gunicorn servirá el backend de Reflex. Asegúrate de reemplazar 'tu_app_nombre.rx:app'
 # con la ruta correcta a la instancia de tu objeto 'app' de Reflex.
 # Si tu app principal está en `myapp
-CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:8000", "app:app", "--access-logfile", "-", "--error-logfile", "-"]
+# ... (otras líneas de tu Dockerfile) ...
+CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:8000", "src.sof:app", "--access-logfile", "-", "--error-logfile", "-"]
