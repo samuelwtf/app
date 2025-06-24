@@ -22,4 +22,6 @@ RUN pip install --no-cache-dir reflex
 EXPOSE 3000
 
 # Ejecutar Reflex en modo producción
-CMD ["reflex", "run", "--env", "prod"]
+#CMD ["reflex", "run", "--env", "prod"]
+CMD ["http-server", ".", "-p", "3000"]
+
