@@ -1,38 +1,36 @@
-# -------- BUILD STAGE --------
+# ---------------- BUILDER ----------------
 FROM python:3.12-slim AS builder
 
-# Instalar dependencias del sistema
-RUN apt-get update && apt-get install -y curl unzip git
+# Instalar dependencias del sistema necesarias
+RUN apt-get update && \
+    apt-get install -y curl unzip build-essential git && \
+    apt-get clean
 
-# Instalar bun (gestor de paquetes JS que usa Reflex)
-RUN curl -fsSL https://bun.sh/install | bash && \
-    ln -s /root/.bun/bin/bun /usr/local/bin/bun
+# Instalar Reflex
+RUN pip install reflex
 
-# Establecer el directorio de trabajo
+# Crear directorio de la app
 WORKDIR /app
 
-# Copiar archivos del proyecto
+# Copiar el código de la app
 COPY . .
 
-# Instalar dependencias de Python
-RUN pip install --upgrade pip && pip install reflex
-
-# Compilar para producción
+# Exportar la app en modo producción (esto genera web/_export)
 RUN reflex export --env prod
 
-# -------- FINAL STAGE --------
-FROM node:20-alpine AS runner
+# ---------------- RUNTIME ----------------
+FROM node:20-slim AS runner
 
-# Instalar http-server para servir frontend
+# Instalar http-server globalmente para servir frontend
 RUN npm install -g http-server
 
-WORKDIR /web
+WORKDIR /app
 
 # Copiar archivos exportados desde el builder
-COPY --from=builder /app/.web/_export/ .
+COPY --from=builder /app/web/_export/ .
 
-# Exponer puerto 3000 para la web
-EXPOSE 3000
+# Exponer los puertos del backend y frontend
+EXPOSE 3000 8000
 
-# Comando para iniciar el servidor
-CMD ["http-server", ".", "-p", "3000"]
+# Iniciar ambos servidores (frontend y backend)
+CMD ["sh", "-c", "python -m http.server 8000 & http-server . -p 3000"]
