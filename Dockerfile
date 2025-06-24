@@ -31,7 +31,7 @@ RUN pip install reflex
 ENV REFLEX_APP=app.app.app
 
 # Copiar archivos exportados
-COPY --from=builder /app/.web/_export/ .
+COPY --from=builder /app/web/_export/ .
 
 # Exponer los puertos
 EXPOSE 3000 8000
