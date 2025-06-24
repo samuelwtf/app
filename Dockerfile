@@ -1,10 +1,10 @@
-FROM python:3.10-slim
+FROM python:3.12
+
+ENV REDIS_URL=redis://redis PYTHONUNBUFFERED=1
 
 WORKDIR /app
 COPY . .
 
-RUN pip install --upgrade pip && pip install reflex
+RUN pip install -r requirements.txt
 
-EXPOSE 3000
-
-CMD ["reflex", "run", "--env", "prod", "--backend-port", "3000"]
+ENTRYPOINT ["reflex", "run", "--env", "prod", "--backend-only", "--loglevel", "debug" ]
