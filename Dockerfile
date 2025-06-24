@@ -5,14 +5,17 @@ WORKDIR /app
 # Copiar archivos
 COPY . .
 
-# Instalar dependencias
+# Instalar unzip para que Reflex pueda descargar bun
+RUN apt-get update && apt-get install -y unzip
+
+# Instalar dependencias Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Exportar la app (sin la opción incorrecta)
+# Exportar la app (compila frontend y backend)
 RUN reflex export
 
-# Instalar gunicorn para servir FastAPI
+# Instalar Gunicorn para servir FastAPI
 RUN pip install gunicorn
 
-# Servir el backend generado por Reflex
+# Comando para iniciar el servidor
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "reflex_export.app:app"]
