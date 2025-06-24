@@ -1,21 +1,25 @@
 FROM python:3.12-slim
 
-WORKDIR /app/.web
+# Crear y establecer directorio de trabajo
+WORKDIR /app
 
-# Copiar archivos
+# Copiar archivos del proyecto
 COPY . .
 
-# Instalar unzip y curl para permitir la instalación de bun (frontend)
+# Instalar unzip y curl para poder instalar bun
 RUN apt-get update && apt-get install -y unzip curl
 
-# Instalar dependencias Python
+# Instalar dependencias
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Exportar la app (compila frontend y backend)
+# Ejecutar reflex export para compilar frontend/backend
 RUN reflex export
 
-# Instalar Gunicorn para servir FastAPI
+# Cambiar al directorio exportado
+WORKDIR /app/.web
+
+# Instalar Gunicorn
 RUN pip install gunicorn
 
-# Comando para iniciar el servidor
+# Ejecutar la app con Gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app.app:app"]
