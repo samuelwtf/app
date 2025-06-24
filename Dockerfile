@@ -17,8 +17,8 @@ COPY . .
 ENV REFLEX_ENTRYPOINT=app/app/app.py
 
 # Expone los puertos: 8000 (backend/ws) y 3000 (frontend)
-EXPOSE 8000
-EXPOSE 3000
+EXPOSE 3000 8000
 
 # Ejecuta en modo producción (con FastAPI + WebSocket)
-CMD ["reflex", "run", "--env", "prod"]
+#CMD ["reflex", "run", "--env", "prod"]
+CMD ["python3", "-m", "reflex", "run", "--env", "prod"]
