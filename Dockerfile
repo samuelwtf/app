@@ -22,4 +22,6 @@ WORKDIR /app/.web
 RUN pip install gunicorn
 
 # Ejecutar la app con Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app.app:app"]
+#CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app.app:app"]
+CMD ["gunicorn", "web.app.app:app", "--bind", "0.0.0.0:8000"]
+
