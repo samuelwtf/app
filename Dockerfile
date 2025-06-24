@@ -5,8 +5,8 @@ WORKDIR /app
 # Copiar archivos
 COPY . .
 
-# Instalar unzip para que Reflex pueda descargar bun
-RUN apt-get update && apt-get install -y unzip
+# Instalar unzip y curl para permitir la instalación de bun (frontend)
+RUN apt-get update && apt-get install -y unzip curl
 
 # Instalar dependencias Python
 RUN pip install --no-cache-dir -r requirements.txt
