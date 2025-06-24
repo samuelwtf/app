@@ -20,5 +20,5 @@ ENV REFLEX_ENTRYPOINT=app/app/app.py
 EXPOSE 3000 8000
 
 # Ejecuta en modo producción (con FastAPI + WebSocket)
-CMD ["reflex", "run", "--env", "prod"]
-#CMD ["python3", "-m", "reflex", "run", "--env", "prod"]
+#CMD ["reflex", "run", "--env", "prod"]
+CMD ["python3", "-m", "reflex", "run", "--env", "prod"]
