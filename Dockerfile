@@ -20,15 +20,17 @@ RUN pip install gunicorn==21.2.0
 # Esto copiará 'src' y todo lo demás a /app
 COPY . .
 
-# *** ¡CAMBIO CRUCIAL AQUÍ! ***
-# Cambia el directorio de trabajo a la carpeta 'src' para los comandos de Reflex
+# Elimina cualquier rastro de la configuración predeterminada de Reflex si existe
+# y luego cambia el directorio de trabajo a la carpeta 'src'
+# antes de ejecutar los comandos de Reflex.
+RUN rm -rf .reflex && rm -rf .web
 WORKDIR /app/src
 
-# ** ELIMINAMOS LA LÍNEA RUN reflex init **
-# Solo necesitamos exportar el frontend de tu aplicación existente
-RUN reflex export --frontend-only
+# Exporta la aplicación Reflex para producción
+# Reflex ahora buscará 'app.py' en el WORKDIR actual (/app/src)
+RUN reflex export --frontend-only --frontend-path . --backend-path .
 
-# *** Vuelve al directorio raíz de la app para el CMD de Gunicorn ***
+# Vuelve al directorio raíz de la app para el CMD de Gunicorn
 # Gunicorn espera la ruta del módulo desde /app
 WORKDIR /app
 
@@ -36,5 +38,5 @@ WORKDIR /app
 EXPOSE 8000
 
 # Comando para ejecutar la aplicación Reflex usando Gunicorn
-# La ruta 'src.sof:app' ahora es correcta porque el WORKDIR de Gunicorn es /app
-CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:8000", "src.sof:app", "--access-logfile", "-", "--error-logfile", "-"]
+# La ruta ahora es 'src.app:app' porque el archivo se llama app.py dentro de src.
+CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:8000", "src.app:app", "--access-logfile", "-", "--error-logfile", "-"]
