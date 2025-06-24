@@ -21,13 +21,11 @@ RUN pip install gunicorn==21.2.0
 COPY . .
 
 # *** ¡CAMBIO CRUCIAL AQUÍ! ***
-# Cambia el directorio de trabajo a la carpeta 'src'
-# para que los comandos de Reflex se ejecuten desde allí.
+# Cambia el directorio de trabajo a la carpeta 'src' para los comandos de Reflex
 WORKDIR /app/src
 
-# Inicializa y exporta la aplicación Reflex para producción
-# Ahora no necesitas --app-name porque Reflex está en el directorio correcto
-RUN reflex init -y 0
+# ** ELIMINAMOS LA LÍNEA RUN reflex init **
+# Solo necesitamos exportar el frontend de tu aplicación existente
 RUN reflex export --frontend-only
 
 # *** Vuelve al directorio raíz de la app para el CMD de Gunicorn ***
