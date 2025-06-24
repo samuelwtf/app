@@ -2,7 +2,7 @@
 FROM python:3.12-slim
 
 # Establece el directorio de trabajo dentro del contenedor
-WORKDIR /app
+WORKDIR /
 
 # Actualiza los índices de paquetes e instala las dependencias del sistema necesarias
 # 'unzip' es para que Reflex pueda descomprimir archivos (ej. Bun)
