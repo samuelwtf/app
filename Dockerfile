@@ -28,8 +28,8 @@ COPY . .
 # El comando `reflex export --frontend-only` construye el frontend estático.
 # Asegúrate de que 'tu_app_nombre' es el nombre real de tu módulo principal de Reflex.
 # Por ejemplo, si tu aplicación principal es `my_project/my_project.py`, tu_app_nombre es `my_project`.
-RUN reflex init
-RUN reflex export --frontend-only
+RUN reflex init --app-name src.sof
+RUN reflex export --frontend-only --frontend-app src.sof
 
 # Expone el puerto 8000, que es donde Gunicorn (el servidor de Python) escuchará
 EXPOSE 8000
