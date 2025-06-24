@@ -3,22 +3,21 @@ FROM python:3.12-slim
 ENV PATH="/root/.local/bin:$PATH"
 WORKDIR /app
 
-# Instalar dependencias básicas
-RUN apt-get update && apt-get install -y unzip && rm -rf /var/lib/apt/lists/*
+# Instalar dependencias del sistema necesarias
+RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
 
-# Instalar Reflex usando pip directamente
+# Instalar Reflex desde pip
 RUN pip install reflex
 
-# Copiar el código de la app
+# Copiar el código fuente
 COPY . .
 
-# Exportar la app para producción
+# Exportar la app
 RUN reflex export
 
 # Instalar gunicorn para servir la app
 RUN pip install gunicorn
 
-EXPOSE 8000
+EXPOSE 3000
 
-# Ejecutar la app desde el archivo app.py
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:3000", "app:app"]
