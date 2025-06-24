@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-# Instala dependencias del sistema
+# Instala Node.js (npm)
 RUN apt-get update && apt-get install -y curl gnupg \
     && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
@@ -9,17 +9,17 @@ RUN apt-get update && apt-get install -y curl gnupg \
 # Verifica que npm y node están instalados
 RUN node -v && npm -v
 
-# Establece el directorio de trabajo
+# Establece directorio de trabajo
 WORKDIR /app
 
-# Copia archivos del proyecto
+# Copia los archivos del proyecto
 COPY . .
 
-# Instala dependencias Python
+# Instala Reflex
 RUN pip install --no-cache-dir reflex
 
-# Expone el puerto
+# Expone el puerto predeterminado de Reflex
 EXPOSE 3000
 
-# Ejecuta Reflex
+# Comando de inicio (modo producción)
 CMD ["reflex", "run", "--env", "prod"]
