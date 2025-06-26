@@ -1,24 +1,31 @@
-# Etapa base con Python
-FROM python:3.12-slim
+FROM python:3.11-slim
 
-# Instala unzip y curl (necesarios para instalar bun)
-RUN apt-get update && apt-get install -y curl unzip
-
-# Instala Reflex
-RUN pip install reflex
-
-# Crea el directorio de trabajo
 WORKDIR /app
 
-# Copia todo el código
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar requirements e instalar dependencias Python
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar el código de la aplicación
 COPY . .
 
-# Establece el entrypoint si tu archivo raíz está en app/app/app.py
-ENV REFLEX_ENTRYPOINT=app/app/app.py
+# Inicializar Reflex (instala dependencias de Node.js)
+RUN reflex init
 
-# Expone los puertos: 8000 (backend/ws) y 3000 (frontend)
-EXPOSE 3000 8000
+# Compilar la aplicación para producción
+RUN reflex export --frontend-only
 
-# Ejecuta en modo producción (con FastAPI + WebSocket)
-#CMD ["reflex", "run", "--env", "prod"]
-CMD ["python3", "-m", "reflex", "run", "--env", "prod"]
+# Exponer puertos
+EXPOSE 3000
+EXPOSE 8000
+
+# Comando para ejecutar en producción
+CMD ["reflex", "run", "--env", "prod", "--port", "3000", "--backend-port", "8000"]
