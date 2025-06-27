@@ -8,5 +8,7 @@ config = rx.Config(
     env=rx.Env.PROD,
     # Si usas base de datos
     # db_url="postgresql://user:pass@host:port/dbname"
-    plugins=[rx.plugins.TailwindV3Plugin()]
+    backend_host="0.0.0.0",
+    frontend_host="0.0.0.0",    
+    plugins=[rx.plugins.TailwindV3Plugin()]    
 )
