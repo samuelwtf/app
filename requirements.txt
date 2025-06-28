@@ -2,3 +2,4 @@ reflex==0.7.14
 gunicorn
 fastapi
 uvicorn
+granian
