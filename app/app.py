@@ -1,6 +1,6 @@
 import reflex as rx
-from login import login_page
-from register import register_page  # Asumiendo que también separaste el registro
+from .login import login_page
+from .register import register_page  # Asumiendo que también separaste el registro
 
 
 # ---------- Layout base con menú ----------
