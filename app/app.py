@@ -2,7 +2,7 @@ import reflex as rx
 from .login import login_page
 from .register import register_page  # Asumiendo que también separaste el registro
 from .layout import main_layout
-
+from .navbar import navbar_user
 
 # ---------- Layout base con menú ----------
 def layout(content):
