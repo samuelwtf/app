@@ -117,12 +117,20 @@ def register_page():
         rx.card(
             rx.vstack(
                 rx.hstack(
-                    rx.icon("user-plus", size=24, color="blue"),
+                    rx.icon(tag="user-plus", size=24, color="blue"),
                     rx.heading("Crear Cuenta", size="6"),
                     align="center",
                     spacing="2",
+                    width="100%",
+                    justify="center",
                 ),
-                rx.text("Completa el formulario para crear tu cuenta", size="2", color="gray", text_align="center"),
+                rx.text(
+                    "Completa el formulario para crear tu cuenta",
+                    size="2",
+                    color="gray",
+                    text_align="center",
+                    width="100%",
+                ),
 
                 form_field(
                     "Nombre completo",
@@ -177,22 +185,33 @@ def register_page():
                     ),
                     align="start",
                     spacing="2",
+                    width="100%",
                 ),
 
                 rx.cond(
                     RegisterState.error_message != "",
-                    rx.callout(RegisterState.error_message, icon="alert-circle", color="red", size="1"),
+                    rx.callout(
+                        RegisterState.error_message,
+                        icon="message_circle_dashed",  # ícono válido
+                        color="red",
+                        size="1",
+                    ),
                 ),
                 rx.cond(
                     RegisterState.success_message != "",
-                    rx.callout(RegisterState.success_message, icon="check-circle", color="green", size="1"),
+                    rx.callout(
+                        RegisterState.success_message,
+                        icon="check_check",  # ícono válido
+                        color="green",
+                        size="1",
+                    ),
                 ),
 
                 rx.button(
                     rx.cond(
                         RegisterState.is_loading,
                         rx.hstack(rx.spinner(size="1"), "Creando cuenta...", align="center", spacing="2"),
-                        rx.hstack(rx.icon("user-plus", size=16), "Crear cuenta", align="center", spacing="2"),
+                        rx.hstack(rx.icon(tag="user-plus", size=16), "Crear cuenta", align="center", spacing="2"),
                     ),
                     on_click=RegisterState.handle_register,
                     disabled=RegisterState.is_loading,
@@ -207,6 +226,7 @@ def register_page():
                     align="center",
                     spacing="2",
                     justify="center",
+                    width="100%",
                 ),
                 spacing="4",
                 width="100%",
@@ -216,5 +236,7 @@ def register_page():
             variant="classic",
         ),
         min_height="100vh",
-        padding="4",
+        align="center",
+        justify="center",     # 💡 Esto centra verticalmente
     )
+
