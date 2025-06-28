@@ -1,8 +1,6 @@
 # login.py
 import reflex as rx
 
-from .navbar import navbar_user
-
 def login_page():
     return rx.center(
         rx.card(
