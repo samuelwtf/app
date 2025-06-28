@@ -28,33 +28,7 @@ def layout(content):
 # ---------- Página principal (home) ----------
 def index():
     return layout(
-        rx.center(
-            rx.vstack(
-                rx.heading("Bienvenido a Mi Plataforma", size="8", color="blue"),
-                rx.text(
-                    "Una solución moderna para gestionar tus cuentas, servicios y más.",
-                    size="3",
-                    color="gray",
-                    text_align="center",
-                    max_width="500px",
-                ),
-                rx.hstack(
-                    rx.link(
-                        rx.button("Crear cuenta", size="3", variant="solid", color_scheme="blue"),
-                        href="/register",
-                    ),
-                    rx.link(
-                        rx.button("Iniciar sesión", size="3", variant="outline", color_scheme="blue"),
-                        href="/login",
-                    ),
-                    spacing="4",
-                    padding_top="4",
-                ),
-                spacing="6",
-                align="center",
-            ),
-            min_height="80vh",
-        )
+        navbar_user()
     )
 
 
