@@ -58,7 +58,7 @@ def index():
 
 
 # ---------- Configuración de la app ----------
-app = rx.App(show_footer=False)
+app = rx.App()
 app.add_page(index, route="/")
 app.add_page(register_page, route="/register")
 app.add_page(login_page, route="/login")
