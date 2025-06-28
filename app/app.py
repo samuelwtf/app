@@ -6,29 +6,39 @@ from .navbar import navbar_user
 
 # ---------- Layout base con menú ----------
 def layout(content):
-    return rx.container(
-        rx.vstack(
-            rx.hstack(
-                rx.heading("Mi Plataforma", size="5", color="blue"),
-                rx.spacer(),
-                rx.link("Inicio", href="/", size="2"),
-                rx.link("Registrarse", href="/register", size="2"),
-                rx.link("Login", href="/login", size="2"),
-                spacing="4",
-                padding_y="4",
-            ),
-            rx.divider(),
-            content,
-        ),
-        max_width="100%",
-        padding_x="6",
-    )
+    return navbar_user()
 
 
 # ---------- Página principal (home) ----------
 def index():
     return layout(
-        navbar_user()
+        rx.center(
+            rx.vstack(
+                rx.heading("Bienvenido a Mi Plataforma", size="8", color="blue"),
+                rx.text(
+                    "Una solución moderna para gestionar tus cuentas, servicios y más.",
+                    size="3",
+                    color="gray",
+                    text_align="center",
+                    max_width="500px",
+                ),
+                rx.hstack(
+                    rx.link(
+                        rx.button("Crear cuenta", size="3", variant="solid", color_scheme="blue"),
+                        href="/register",
+                    ),
+                    rx.link(
+                        rx.button("Iniciar sesión", size="3", variant="outline", color_scheme="blue"),
+                        href="/login",
+                    ),
+                    spacing="4",
+                    padding_top="4",
+                ),
+                spacing="6",
+                align="center",
+            ),
+            min_height="80vh",
+        )
     )
 
 
