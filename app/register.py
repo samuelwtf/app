@@ -117,7 +117,7 @@ def register_page():
         rx.card(
             rx.vstack(
                 rx.hstack(
-                    rx.icon(tag="user-plus", size=24, color="blue"),
+                    rx.icon("user-plus", size=24, color="blue"),
                     rx.heading("Crear Cuenta", size="6"),
                     align="center",
                     spacing="2",
@@ -192,7 +192,7 @@ def register_page():
                     rx.cond(
                         RegisterState.is_loading,
                         rx.hstack(rx.spinner(size="1"), "Creando cuenta...", align="center", spacing="2"),
-                        rx.hstack(rx.icon(tag="user-plus", size=16), "Crear cuenta", align="center", spacing="2"),
+                        rx.hstack(rx.icon("user-plus", size=16), "Crear cuenta", align="center", spacing="2"),
                     ),
                     on_click=RegisterState.handle_register,
                     disabled=RegisterState.is_loading,
