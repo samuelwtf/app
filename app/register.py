@@ -1,5 +1,5 @@
 import reflex as rx
-from app.layout import main_layout
+from .layout import main_layout
 
 # ---------- Estado del formulario ----------
 class RegisterState(rx.State):
